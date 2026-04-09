@@ -2,29 +2,100 @@
 <html>
 <head>
     <title>Heart Disease Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 420px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input[type=range] {
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .range-text {
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>Heart Disease Prediction Form</h2>
+
+<div class="container">
+    <h2>❤️ Heart Disease Prediction</h2>
 
     <form action="/predict_form" method="post">
-        Age: <input type="number" name="age"><br><br>
-        Sex: <input type="number" name="sex"><br><br>
-        CP: <input type="number" name="cp"><br><br>
-        Trestbps: <input type="number" name="trestbps"><br><br>
-        Chol: <input type="number" name="chol"><br><br>
-        FBS: <input type="number" name="fbs"><br><br>
-        Restecg: <input type="number" name="restecg"><br><br>
-        Thalach: <input type="number" name="thalach"><br><br>
-        Exang: <input type="number" name="exang"><br><br>
-        Oldpeak: <input type="number" step="0.1" name="oldpeak"><br><br>
-        Slope: <input type="number" name="slope"><br><br>
-        CA: <input type="number" name="ca"><br><br>
-        Thal: <input type="number" name="thal"><br><br>
+
+        <label>Age (20 - 80): <span id="age_val">50</span></label>
+        <div class="range-text">Min: 20 | Max: 80</div>
+        <input type="range" name="age" min="20" max="80" value="50"
+               oninput="age_val.innerText = this.value"><br><br>
+
+        <label>Sex (0=Female, 1=Male): <span id="sex_val">1</span></label>
+        <div class="range-text">Min: 0 | Max: 1</div>
+        <input type="range" name="sex" min="0" max="1" value="1"
+               oninput="sex_val.innerText = this.value"><br><br>
+
+        <label>Chest Pain (0 - 3): <span id="cp_val">1</span></label>
+        <div class="range-text">Min: 0 | Max: 3</div>
+        <input type="range" name="cp" min="0" max="3" value="1"
+               oninput="cp_val.innerText = this.value"><br><br>
+
+        <label>Blood Pressure (90 - 200): <span id="bp_val">120</span></label>
+        <div class="range-text">Min: 90 | Max: 200</div>
+        <input type="range" name="trestbps" min="90" max="200" value="120"
+               oninput="bp_val.innerText = this.value"><br><br>
+
+        <label>Cholesterol (100 - 400): <span id="chol_val">200</span></label>
+        <div class="range-text">Min: 100 | Max: 400</div>
+        <input type="range" name="chol" min="100" max="400" value="200"
+               oninput="chol_val.innerText = this.value"><br><br>
+
+        <label>Max Heart Rate (70 - 210): <span id="thalach_val">150</span></label>
+        <div class="range-text">Min: 70 | Max: 210</div>
+        <input type="range" name="thalach" min="70" max="210" value="150"
+               oninput="thalach_val.innerText = this.value"><br><br>
+
+        <label>Oldpeak (0 - 6): <span id="oldpeak_val">1</span></label>
+        <div class="range-text">Min: 0 | Max: 6</div>
+        <input type="range" name="oldpeak" min="0" max="6" step="0.1" value="1"
+               oninput="oldpeak_val.innerText = this.value"><br><br>
+
+        <label>Slope (0 - 2): <span id="slope_val">1</span></label>
+        <div class="range-text">Min: 0 | Max: 2</div>
+        <input type="range" name="slope" min="0" max="2" value="1"
+               oninput="slope_val.innerText = this.value"><br><br>
+
+        <label>CA (0 - 3): <span id="ca_val">0</span></label>
+        <div class="range-text">Min: 0 | Max: 3</div>
+        <input type="range" name="ca" min="0" max="3" value="0"
+               oninput="ca_val.innerText = this.value"><br><br>
+
+        <label>Thal (1 - 3): <span id="thal_val">2</span></label>
+        <div class="range-text">Min: 1 | Max: 3</div>
+        <input type="range" name="thal" min="1" max="3" value="2"
+               oninput="thal_val.innerText = this.value"><br><br>
 
         <button type="submit">Predict</button>
     </form>
 
     <h3>{{ prediction }}</h3>
+</div>
 
 </body>
 </html>
