@@ -8,7 +8,7 @@ templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
-# Load model 
+# Load model once (important)
 model = joblib.load("heart_model.pkl")
 
 @app.get("/")
