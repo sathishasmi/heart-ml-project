@@ -1,248 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CardioPredict ❤️</title>
-
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #121212;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start; /* changed */
-        min-height: 100vh;
-        margin: 0;
-        padding: 20px;
-        overflow-y: auto; /* allows scrolling */
-        color: #fff;
-    }
-
-    .container {
-        background: #1e1e1e;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 0 25px rgba(0,0,0,0.5);
-        width: 400px;
-        margin-top: 20px;
-        border: 1px solid #2a2a2a;
-        transition: 0.3s;
-    }
-
-    h1 {
-        text-align: center;
-        color: #ffffff;
-    }
-    /* Spinner */
-.spinner {
-    border: 4px solid #2c2c2c;
-    border-top: 4px solid #007bff;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: auto;
-}
-
-/*  Animation */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-    label {
-        font-size: 14px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0 15px 0;
-        border-radius: 6px;
-        border: 1px solid #333;
-        background: #2c2c2c;
-        color: #fff;
-    }
-
-    input:focus, select:focus {
-        outline: none;
-        border: 1px solid #007bff;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    button:hover {
-        background: #0056b3;
-    }
-
-    #result {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-    }
-</style>
+    <title>Heart Disease Prediction</title>
 </head>
-
 <body>
+    <h2>Heart Disease Prediction Form</h2>
 
-<div class="container">
-    <h1 style="text-align:center; margin-bottom:5px;">
-    CardioPredict ❤️
-</h1>
+    <form action="/predict_form" method="post">
+        Age: <input type="number" name="age"><br><br>
+        Sex: <input type="number" name="sex"><br><br>
+        CP: <input type="number" name="cp"><br><br>
+        Trestbps: <input type="number" name="trestbps"><br><br>
+        Chol: <input type="number" name="chol"><br><br>
+        FBS: <input type="number" name="fbs"><br><br>
+        Restecg: <input type="number" name="restecg"><br><br>
+        Thalach: <input type="number" name="thalach"><br><br>
+        Exang: <input type="number" name="exang"><br><br>
+        Oldpeak: <input type="number" step="0.1" name="oldpeak"><br><br>
+        Slope: <input type="number" name="slope"><br><br>
+        CA: <input type="number" name="ca"><br><br>
+        Thal: <input type="number" name="thal"><br><br>
 
-<p style="text-align:center; font-size:14px; color:#888; margin-top:0;">
-    by Satheesh
+        <button type="submit">Predict</button>
+    </form>
 
-<p style="text-align: center; margin-bottom: 20px;">
-    AI-powered Heart Disease Risk Assessment
-</p>
-
-
-    Age:
-    <input type="number" id="age">
-
-    Sex:
-    <select id="sex">
-        <option value="1">Male</option>
-        <option value="0">Female</option>
-    </select>
-
-    Chest Pain Type(CP):
-    <select id="cp">
-    <option value="0">Typical Angina</option>
-    <option value="1">Atypical Angina</option>
-    <option value="2">Non-anginal Pain</option>
-    <option value="3">Asymptomatic</option>
-</select>
-
-    Resting BP:
-    <input type="number" id="trestbps">
-
-    Cholesterol:
-    <input type="number" id="chol">
-
-    Fasting Blood Sugar(FBS):
-    <select id="fbs">
-    <option value="1">> 120 mg/dl (True)</option>
-    <option value="0">≤ 120 mg/dl (False)</option>
-</select>
-
-    Rest ECG:
-    <select id="restecg">
-    <option value="0">Normal</option>
-    <option value="1">ST-T Abnormality</option>
-    <option value="2">Left Ventricular Hypertrophy</option>
-</select>
-
-    Max Heart Rate:
-    <input type="number" id="thalach">
-
-    Exercise Induced Angina(exang):
-    <select id="exang">
-    <option value="1">Yes</option>
-    <option value="0">No</option>
-</select>
-
-    Oldpeak:
-    <input type="number" step="0.1" id="oldpeak">
-
-    Slope:
-    <select id="slope">
-    <option value="0">Upsloping</option>
-    <option value="1">Flat</option>
-    <option value="2">Downsloping</option>
-</select>
-
-    CA:
-    <input type="number" id="ca">
-
-    Thal:
-    <select id="thal">
-    <option value="1">Normal</option>
-    <option value="2">Fixed Defect</option>
-    <option value="3">Reversible Defect</option>
-</select>
-
-    <button onclick="predict()">Predict</button>
-    <div id="loader" style="display:none; text-align:center; margin-top:15px;">
-    <div class="spinner"></div>
-    <p>Analyzing...</p>
-</div>
-
-    <div id="result"></div>
-</div>
-
-<script>
-async function predict() {
-
-    const inputs = [
-        "age","sex","cp","trestbps","chol","fbs",
-        "restecg","thalach","exang","oldpeak",
-        "slope","ca","thal"
-    ];
-
-    //  Validation
-    for (let id of inputs) {
-        if (document.getElementById(id).value === "") {
-            alert("Please fill all fields!");
-            return;
-        }
-    }
-
-    //  Show loader
-    document.getElementById("loader").style.display = "block";
-
-    //  Disable button
-    const btn = document.querySelector("button");
-    btn.disabled = true;
-    btn.innerText = "Predicting...";
-
-    const data = inputs.map(id =>
-        Number(document.getElementById(id).value)
-    );
-
-    try {
-        const response = await fetch("/predict", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        document.getElementById("result").innerText =
-            result.prediction === 1
-            ? " High Risk of Heart Disease "
-            : " Low Risk of Heart Disease ";
-
-    } catch (error) {
-        const resultBox = document.getElementById("result");
-
-if (result.prediction === 1) {
-    resultBox.innerHTML = "<span style='color:#ff4d4d'>High Risk of Heart Disease</span>";
-} else {
-    resultBox.innerHTML = " <span style='color:#00cc66'>Low Risk of Heart Disease</span>";
-}
-    }
-
-    //  Hide loader
-    document.getElementById("loader").style.display = "none";
-
-    //  Enable button
-    btn.disabled = false;
-    btn.innerText = "Predict";
-}
-</script>
+    <h3>{{ prediction }}</h3>
 
 </body>
 </html>
