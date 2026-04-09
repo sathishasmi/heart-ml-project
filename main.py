@@ -18,19 +18,20 @@ def home(request: Request):
 
 @app.post("/predict_form")
 def predict_form(
-    age = int(age)
-    sex = int(sex)
-    cp = int(cp)
-    trestbps = int(trestbps)
-    chol = int(chol)
-    fbs = int(fbs)
-    restecg = int(restecg)
-    thalach = int(thalach)
-    exang = int(exang)
-    oldpeak = float(oldpeak)
-    slope = int(slope)
-    ca = int(ca)
-    thal = int(thal)
+    request: Request,
+    age: int = Form(...),
+    sex: int = Form(...),
+    cp: int = Form(...),
+    trestbps: int = Form(...),
+    chol: int = Form(...),
+    fbs: int = Form(...),
+    restecg: int = Form(...),
+    thalach: int = Form(...),
+    exang: int = Form(...),
+    oldpeak: float = Form(...),
+    slope: int = Form(...),
+    ca: int = Form(...),
+    thal: int = Form(...)
 ):
     
     input_data = pd.DataFrame([{
