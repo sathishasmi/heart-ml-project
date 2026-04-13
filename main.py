@@ -1,25 +1,27 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
-from fastapi.requests import Request
+from fastapi.responses import HTMLResponse
 import pandas as pd
 import joblib
 
-templates = Jinja2Templates(directory="templates")
-
 app = FastAPI()
 
-# Load model once (important)
+templates = Jinja2Templates(directory="templates")
+
+# Load model
 model = joblib.load("heart_model.pkl")
 
-@app.get("/")
+# Home page
+@app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
-    "index.html",
-    {"request": request})
+        "index.html",
+        {"request": request}
+    )
 
-
-@app.post("/predict_form")
-def predict_form(
+# Prediction route
+@app.post("/predict_form", response_class=HTMLResponse)
+def predict(
     request: Request,
     age: int = Form(...),
     sex: int = Form(...),
@@ -35,28 +37,32 @@ def predict_form(
     ca: int = Form(...),
     thal: int = Form(...)
 ):
-    
-    input_data = pd.DataFrame([{
-        "age": age,
-        "sex": sex,
-        "cp": cp,
-        "trestbps": trestbps,
-        "chol": chol,
-        "fbs": fbs,
-        "restecg": restecg,
-        "thalach": thalach,
-        "exang": exang,
-        "oldpeak": oldpeak,
-        "slope": slope,
-        "ca": ca,
-        "thal": thal
-    }])
+    try:
+        # Create dataframe
+        input_data = pd.DataFrame([{
+            "age": age,
+            "sex": sex,
+            "cp": cp,
+            "trestbps": trestbps,
+            "chol": chol,
+            "fbs": fbs,
+            "restecg": restecg,
+            "thalach": thalach,
+            "exang": exang,
+            "oldpeak": oldpeak,
+            "slope": slope,
+            "ca": ca,
+            "thal": thal
+        }])
 
-    prediction = model.predict(input_data)
-    
-    result = "Heart Disease Detected" if prediction[0] == 1 else "No Heart Disease"
+        # Prediction
+        prediction = model.predict(input_data)
+        result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease "
 
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "prediction": result}
-    )
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "prediction": result}
+        )
+
+    except Exception as e:
+        return HTMLResponse(content=f"Error: {str(e)}")
