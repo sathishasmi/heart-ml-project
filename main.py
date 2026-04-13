@@ -56,7 +56,7 @@ def predict(
         prediction = model.predict(input_data)
         result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease "
 
-        return templates.TemplateResponse("index.html", {"request": request, "prediction": result})
+        return HTMLResponse("TEST WORKING")
 
     except Exception as e:
         return HTMLResponse(content=f"Error: {str(e)}")
