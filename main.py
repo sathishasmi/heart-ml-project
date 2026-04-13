@@ -9,7 +9,16 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # Load model
-model = joblib.load("heart_model.pkl")
+import os
+
+try:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(BASE_DIR, "heart_model.pkl")
+    model = joblib.load(model_path)
+    print("Model loaded successfully")
+except Exception as e:
+    print("Model loading failed:", e)
+    model = None
 
 # Home page
 @app.get("/", response_class=HTMLResponse)
@@ -53,8 +62,11 @@ def predict(
         }])
 
         # Prediction
-        prediction = model.predict(input_data)
-        result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease "
+        if model:
+            prediction = model.predict(input_data)
+            result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease ✅"
+        else:
+            result = "Model not loaded"
 
         return HTMLResponse("TEST WORKING")
 
