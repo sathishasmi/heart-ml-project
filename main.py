@@ -13,7 +13,9 @@ model = joblib.load("heart_model.pkl")
 
 @app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+    "index.html",
+    {"request": request})
 
 
 @app.post("/predict_form")
