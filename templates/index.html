@@ -1,30 +1,59 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Heart Disease Prediction</title>
-</head>
-<body>
-    <h2>Heart Disease Prediction Form</h2>
+from fastapi import FastAPI, Form
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
+import pandas as pd
+import joblib
 
-    <form action="/predict_form" method="post">
-        Age: <input type="number" name="age"><br><br>
-        Sex: <input type="number" name="sex"><br><br>
-        CP: <input type="number" name="cp"><br><br>
-        Trestbps: <input type="number" name="trestbps"><br><br>
-        Chol: <input type="number" name="chol"><br><br>
-        FBS: <input type="number" name="fbs"><br><br>
-        Restecg: <input type="number" name="restecg"><br><br>
-        Thalach: <input type="number" name="thalach"><br><br>
-        Exang: <input type="number" name="exang"><br><br>
-        Oldpeak: <input type="number" step="0.1" name="oldpeak"><br><br>
-        Slope: <input type="number" name="slope"><br><br>
-        CA: <input type="number" name="ca"><br><br>
-        Thal: <input type="number" name="thal"><br><br>
+templates = Jinja2Templates(directory="templates")
 
-        <button type="submit">Predict</button>
-    </form>
+app = FastAPI()
 
-    <h3>{{ prediction }}</h3>
+# Load model once (important)
+model = joblib.load("heart_model.pkl")
 
-</body>
-</html>
+@app.get("/")
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.post("/predict_form")
+def predict_form(
+    request: Request,
+    age: int = Form(...),
+    sex: int = Form(...),
+    cp: int = Form(...),
+    trestbps: int = Form(...),
+    chol: int = Form(...),
+    fbs: int = Form(...),
+    restecg: int = Form(...),
+    thalach: int = Form(...),
+    exang: int = Form(...),
+    oldpeak: float = Form(...),
+    slope: int = Form(...),
+    ca: int = Form(...),
+    thal: int = Form(...)
+):
+    
+    input_data = pd.DataFrame([{
+        "age": age,
+        "sex": sex,
+        "cp": cp,
+        "trestbps": trestbps,
+        "chol": chol,
+        "fbs": fbs,
+        "restecg": restecg,
+        "thalach": thalach,
+        "exang": exang,
+        "oldpeak": oldpeak,
+        "slope": slope,
+        "ca": ca,
+        "thal": thal
+    }])
+
+    prediction = model.predict(input_data)
+    
+    result = "Heart Disease Detected" if prediction[0] == 1 else "No Heart Disease"
+
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request, "prediction": result}
+    )
