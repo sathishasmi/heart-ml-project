@@ -14,10 +14,7 @@ model = joblib.load("heart_model.pkl")
 # Home page
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
-    )
+    return templates.TemplateResponse("index.html", {"request": request})
 
 # Prediction route
 @app.post("/predict_form", response_class=HTMLResponse)
@@ -59,10 +56,7 @@ def predict(
         prediction = model.predict(input_data)
         result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease "
 
-        return templates.TemplateResponse(
-            "index.html",
-            {"request": request, "prediction": result}
-        )
+        return templates.TemplateResponse("index.html", {"request": request, "prediction": result})
 
     except Exception as e:
         return HTMLResponse(content=f"Error: {str(e)}")
