@@ -4,27 +4,30 @@
     <title>Heart Disease Prediction</title>
 </head>
 <body>
+
     <h2>Heart Disease Prediction Form</h2>
 
     <form action="/predict_form" method="post">
-        Age: <input type="number" name="age"><br><br>
-        Sex: <input type="number" name="sex"><br><br>
-        CP: <input type="number" name="cp"><br><br>
-        Trestbps: <input type="number" name="trestbps"><br><br>
-        Chol: <input type="number" name="chol"><br><br>
-        FBS: <input type="number" name="fbs"><br><br>
-        Restecg: <input type="number" name="restecg"><br><br>
-        Thalach: <input type="number" name="thalach"><br><br>
-        Exang: <input type="number" name="exang"><br><br>
-        Oldpeak: <input type="number" step="0.1" name="oldpeak"><br><br>
-        Slope: <input type="number" name="slope"><br><br>
-        CA: <input type="number" name="ca"><br><br>
-        Thal: <input type="number" name="thal"><br><br>
+
+        Age: <input type="number" name="age" required><br><br>
+        Sex: <input type="number" name="sex" required><br><br>
+        CP: <input type="number" name="cp" required><br><br>
+        Trestbps: <input type="number" name="trestbps" required><br><br>
+        Chol: <input type="number" name="chol" required><br><br>
+        FBS: <input type="number" name="fbs" required><br><br>
+        Restecg: <input type="number" name="restecg" required><br><br>
+        Thalach: <input type="number" name="thalach" required><br><br>
+        Exang: <input type="number" name="exang" required><br><br>
+        Oldpeak: <input type="number" step="0.1" name="oldpeak" required><br><br>
+        Slope: <input type="number" name="slope" required><br><br>
+        CA: <input type="number" name="ca" required><br><br>
+        Thal: <input type="number" name="thal" required><br><br>
 
         <button type="submit">Predict</button>
+
     </form>
 
-    <h3>{{ prediction }}</h3>
+    <h3>{{ prediction if prediction else "" }}</h3>
 
 </body>
 </html>
