@@ -1,33 +1,34 @@
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 import pandas as pd
 import joblib
 
-app = FastAPI()
-
 templates = Jinja2Templates(directory="templates")
 
-# Load model
-import os
+app = FastAPI()
 
+# Load model once (important)
 try:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(BASE_DIR, "heart_model.pkl")
-    model = joblib.load(model_path)
-    print("Model loaded successfully")
+    model = joblib.load("heart_model.pkl")
 except Exception as e:
-    print("Model loading failed:", e)
-    model = None
+    print("Model loading error:", e)
 
-# Home page
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        name="index.html",
+        request=request,
+        context={
+            "request": request,
+            "prediction": None
+        }
+    )
 
-# Prediction route
+from fastapi.responses import HTMLResponse
+
 @app.post("/predict_form", response_class=HTMLResponse)
-def predict(
+def predict_form(
     request: Request,
     age: int = Form(...),
     sex: int = Form(...),
@@ -43,32 +44,31 @@ def predict(
     ca: int = Form(...),
     thal: int = Form(...)
 ):
-    try:
-        # Create dataframe
-        input_data = pd.DataFrame([{
-            "age": age,
-            "sex": sex,
-            "cp": cp,
-            "trestbps": trestbps,
-            "chol": chol,
-            "fbs": fbs,
-            "restecg": restecg,
-            "thalach": thalach,
-            "exang": exang,
-            "oldpeak": oldpeak,
-            "slope": slope,
-            "ca": ca,
-            "thal": thal
-        }])
+    data = pd.DataFrame([{
+    "age": age,
+    "sex": sex,
+    "cp": cp,
+    "trestbps": trestbps,
+    "chol": chol,
+    "fbs": fbs,
+    "restecg": restecg,
+    "thalach": thalach,
+    "exang": exang,
+    "oldpeak": oldpeak,
+    "slope": slope,
+    "ca": ca,
+    "thal": thal
+}])
 
-        # Prediction
-        if model:
-            prediction = model.predict(input_data)
-            result = "Heart Disease Detected ❤️" if prediction[0] == 1 else "No Heart Disease ✅"
-        else:
-            result = "Model not loaded"
+    prediction = model.predict(data)[0]
 
-        return HTMLResponse("TEST WORKING")
+    result = "Heart Disease Detected " if prediction == 1 else "No Heart Disease "
 
-    except Exception as e:
-        return HTMLResponse(content=f"Error: {str(e)}")
+    return templates.TemplateResponse(
+    name="index.html",
+    request=request,
+    context={
+        "request": request,
+        "prediction": result
+    }
+    )

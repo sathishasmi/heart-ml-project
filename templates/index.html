@@ -2,32 +2,223 @@
 <html>
 <head>
     <title>Heart Disease Prediction</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 380px;
+            max-height: 95vh;
+            overflow-y: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #888;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px 8px 8px 35px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52,152,219,0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .green { color: green; }
+        .red { color: red; }
+    </style>
 </head>
+
 <body>
 
-    <h2>Heart Disease Prediction Form</h2>
+<div class="container">
+    <h2><i class="fa-solid fa-heart-pulse"></i> Heart Prediction</h2>
 
     <form action="/predict_form" method="post">
 
-        Age: <input type="number" name="age" required><br><br>
-        Sex: <input type="number" name="sex" required><br><br>
-        CP: <input type="number" name="cp" required><br><br>
-        Trestbps: <input type="number" name="trestbps" required><br><br>
-        Chol: <input type="number" name="chol" required><br><br>
-        FBS: <input type="number" name="fbs" required><br><br>
-        Restecg: <input type="number" name="restecg" required><br><br>
-        Thalach: <input type="number" name="thalach" required><br><br>
-        Exang: <input type="number" name="exang" required><br><br>
-        Oldpeak: <input type="number" step="0.1" name="oldpeak" required><br><br>
-        Slope: <input type="number" name="slope" required><br><br>
-        CA: <input type="number" name="ca" required><br><br>
-        Thal: <input type="number" name="thal" required><br><br>
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="number" name="age" placeholder="Age (20-80)" required>
+        </div>
 
-        <button type="submit">Predict</button>
+        <div class="input-group">
+            <i class="fa-solid fa-venus-mars"></i>
+            <select name="sex">
+                <option value="0">Female</option>
+                <option value="1">Male</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-heart"></i>
+            <select name="cp">
+                <option value="0">Typical Angina</option>
+                <option value="1">Atypical Angina</option>
+                <option value="2">Non-anginal Pain</option>
+                <option value="3">Asymptomatic</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-gauge"></i>
+            <input type="number" name="trestbps" placeholder="Resting BP" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-droplet"></i>
+            <input type="number" name="chol" placeholder="Cholesterol" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-flask"></i>
+            <select name="fbs">
+                <option value="0">≤ 120</option>
+                <option value="1">> 120</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-wave-square"></i>
+            <select name="restecg">
+                <option value="0">Normal</option>
+                <option value="1">ST-T Abnormality</option>
+                <option value="2">Hypertrophy</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <input type="number" name="thalach" placeholder="Max Heart Rate" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-running"></i>
+            <select name="exang">
+                <option value="0">No Angina</option>
+                <option value="1">Angina</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-chart-line"></i>
+            <input type="number" step="0.1" name="oldpeak" placeholder="Oldpeak" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-chart-area"></i>
+            <select name="slope">
+                <option value="0">Upsloping</option>
+                <option value="1">Flat</option>
+                <option value="2">Downsloping</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-layer-group"></i>
+            <select name="ca">
+                <option value="0">0 Vessels</option>
+                <option value="1">1 Vessel</option>
+                <option value="2">2 Vessels</option>
+                <option value="3">3 Vessels</option>
+                <option value="4">4 Vessels</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-heart-crack"></i>
+            <select name="thal">
+                <option value="0">Normal</option>
+                <option value="1">Fixed Defect</option>
+                <option value="2">Reversible Defect</option>
+                <option value="3">Unknown</option>
+            </select>
+        </div>
+
+        <button type="submit">
+            <i class="fa-solid fa-stethoscope"></i> Predict
+        </button>
 
     </form>
 
-    <h3>{{ prediction if prediction else "" }}</h3>
+    <div class="result">
+        {% if prediction %}
+            <span class="{% if 'No' in prediction %}green{% else %}red{% endif %}">
+                {{ prediction }}
+            </span>
+        {% endif %}
+    </div>
+
+</div>
 
 </body>
 </html>
